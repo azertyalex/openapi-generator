@@ -159,6 +159,21 @@
 #' dput(result)
 #'
 #'
+#' ####################  TestQueryStyleJsonSerializationObject  ####################
+#'
+#' library(openapi)
+#' var_json_serialized_object_ref_string_query <- Pet$new("name_example", c("photoUrls_example"), 123, Category$new(123, "name_example"), c(Tag$new(123, "name_example")), "available") # Pet |  (Optional)
+#' var_json_serialized_object_array_ref_string_query <- c(Pet$new("name_example", c("photoUrls_example"), 123, Category$new(123, "name_example"), c(Tag$new(123, "name_example")), "available")) # array[Pet] |  (Optional)
+#'
+#' #Test query parameter(s)
+#' api_instance <- QueryApi$new()
+#'
+#' # to save the result into a file, simply add the optional `data_file` parameter, e.g.
+#' # result <- api_instance$TestQueryStyleJsonSerializationObject(json_serialized_object_ref_string_query = var_json_serialized_object_ref_string_query, json_serialized_object_array_ref_string_query = var_json_serialized_object_array_ref_string_querydata_file = "result.txt")
+#' result <- api_instance$TestQueryStyleJsonSerializationObject(json_serialized_object_ref_string_query = var_json_serialized_object_ref_string_query, json_serialized_object_array_ref_string_query = var_json_serialized_object_array_ref_string_query)
+#' dput(result)
+#'
+#'
 #' }
 #' @importFrom R6 R6Class
 #' @importFrom base64enc base64encode
@@ -187,10 +202,11 @@ QueryApi <- R6::R6Class(
     #' @param enum_ref_string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestEnumRefString = function(enum_nonref_string_query = NULL, enum_ref_string_query = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestEnumRefStringWithHttpInfo(enum_nonref_string_query, enum_ref_string_query, data_file = data_file, ...)
+    TestEnumRefString = function(enum_nonref_string_query = NULL, enum_ref_string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestEnumRefStringWithHttpInfo(enum_nonref_string_query, enum_ref_string_query, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -209,9 +225,10 @@ QueryApi <- R6::R6Class(
     #' @param enum_ref_string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestEnumRefStringWithHttpInfo = function(enum_nonref_string_query = NULL, enum_ref_string_query = NULL, data_file = NULL, ...) {
+    TestEnumRefStringWithHttpInfo = function(enum_nonref_string_query = NULL, enum_ref_string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -262,6 +279,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -275,11 +296,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -294,10 +319,11 @@ QueryApi <- R6::R6Class(
     #' @param string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryDatetimeDateString = function(datetime_query = NULL, date_query = NULL, string_query = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryDatetimeDateStringWithHttpInfo(datetime_query, date_query, string_query, data_file = data_file, ...)
+    TestQueryDatetimeDateString = function(datetime_query = NULL, date_query = NULL, string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryDatetimeDateStringWithHttpInfo(datetime_query, date_query, string_query, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -317,9 +343,10 @@ QueryApi <- R6::R6Class(
     #' @param string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryDatetimeDateStringWithHttpInfo = function(datetime_query = NULL, date_query = NULL, string_query = NULL, data_file = NULL, ...) {
+    TestQueryDatetimeDateStringWithHttpInfo = function(datetime_query = NULL, date_query = NULL, string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -373,6 +400,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -386,11 +417,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -405,10 +440,11 @@ QueryApi <- R6::R6Class(
     #' @param string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryIntegerBooleanString = function(integer_query = NULL, boolean_query = NULL, string_query = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryIntegerBooleanStringWithHttpInfo(integer_query, boolean_query, string_query, data_file = data_file, ...)
+    TestQueryIntegerBooleanString = function(integer_query = NULL, boolean_query = NULL, string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryIntegerBooleanStringWithHttpInfo(integer_query, boolean_query, string_query, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -428,9 +464,10 @@ QueryApi <- R6::R6Class(
     #' @param string_query (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryIntegerBooleanStringWithHttpInfo = function(integer_query = NULL, boolean_query = NULL, string_query = NULL, data_file = NULL, ...) {
+    TestQueryIntegerBooleanStringWithHttpInfo = function(integer_query = NULL, boolean_query = NULL, string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -484,6 +521,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -497,11 +538,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -514,10 +559,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleDeepObjectExplodeTrueObject = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleDeepObjectExplodeTrueObjectWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleDeepObjectExplodeTrueObject = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleDeepObjectExplodeTrueObjectWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -535,9 +581,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleDeepObjectExplodeTrueObjectWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleDeepObjectExplodeTrueObjectWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -579,6 +626,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -592,11 +643,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -609,10 +664,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleDeepObjectExplodeTrueObjectAllOf = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleDeepObjectExplodeTrueObjectAllOfWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleDeepObjectExplodeTrueObjectAllOf = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleDeepObjectExplodeTrueObjectAllOfWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -630,9 +686,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleDeepObjectExplodeTrueObjectAllOfWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleDeepObjectExplodeTrueObjectAllOfWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -674,6 +731,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -687,11 +748,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -704,10 +769,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleFormExplodeFalseArrayInteger = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleFormExplodeFalseArrayIntegerWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleFormExplodeFalseArrayInteger = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleFormExplodeFalseArrayIntegerWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -725,9 +791,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleFormExplodeFalseArrayIntegerWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleFormExplodeFalseArrayIntegerWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -770,6 +837,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -783,11 +854,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -800,10 +875,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleFormExplodeFalseArrayString = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleFormExplodeFalseArrayStringWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleFormExplodeFalseArrayString = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleFormExplodeFalseArrayStringWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -821,9 +897,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleFormExplodeFalseArrayStringWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleFormExplodeFalseArrayStringWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -866,6 +943,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -879,11 +960,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -896,10 +981,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleFormExplodeTrueArrayString = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleFormExplodeTrueArrayStringWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleFormExplodeTrueArrayString = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleFormExplodeTrueArrayStringWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -917,9 +1003,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleFormExplodeTrueArrayStringWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleFormExplodeTrueArrayStringWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -961,6 +1048,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -974,11 +1065,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -991,10 +1086,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleFormExplodeTrueObject = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleFormExplodeTrueObjectWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleFormExplodeTrueObject = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleFormExplodeTrueObjectWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -1012,9 +1108,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleFormExplodeTrueObjectWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleFormExplodeTrueObjectWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -1056,6 +1153,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -1069,11 +1170,15 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
@@ -1086,10 +1191,11 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return character
-    TestQueryStyleFormExplodeTrueObjectAllOf = function(query_object = NULL, data_file = NULL, ...) {
-      local_var_response <- self$TestQueryStyleFormExplodeTrueObjectAllOfWithHttpInfo(query_object, data_file = data_file, ...)
+    TestQueryStyleFormExplodeTrueObjectAllOf = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleFormExplodeTrueObjectAllOfWithHttpInfo(query_object, data_file = data_file, ..., .parse = .parse)
       if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
         return(local_var_response$content)
       } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
@@ -1107,9 +1213,10 @@ QueryApi <- R6::R6Class(
     #' @param query_object (optional) No description
     #' @param data_file (optional) name of the data file to save the result
     #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
     #'
     #' @return API response (character) with additional information such as HTTP status code, headers
-    TestQueryStyleFormExplodeTrueObjectAllOfWithHttpInfo = function(query_object = NULL, data_file = NULL, ...) {
+    TestQueryStyleFormExplodeTrueObjectAllOfWithHttpInfo = function(query_object = NULL, data_file = NULL, ..., .parse = TRUE) {
       args <- list(...)
       query_params <- list()
       header_params <- c()
@@ -1151,6 +1258,10 @@ QueryApi <- R6::R6Class(
         if (!is.null(data_file)) {
           self$api_client$WriteFile(local_var_resp, data_file)
         }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
 
         deserialized_resp_obj <- tryCatch(
           self$api_client$DeserializeResponse(local_var_resp, "character"),
@@ -1164,11 +1275,129 @@ QueryApi <- R6::R6Class(
       
       local_var_error_msg <- local_var_resp$response_as_text()      
       if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
-        ApiResponse$new(paste("Server returned ", local_var_resp$status_code, " response status code."), local_var_resp)
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
-        ApiResponse$new("API client error", local_var_resp)
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
       } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
-        if (is.null(local_var_resp$response) || local_var_resp$response == "") {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
+          local_var_resp$response <- "API server error"
+        }
+        return(local_var_resp)
+      }
+    },
+
+    #' @description
+    #' Test query parameter(s)
+    #'
+    #' @param json_serialized_object_ref_string_query (optional) No description
+    #' @param json_serialized_object_array_ref_string_query (optional) No description
+    #' @param data_file (optional) name of the data file to save the result
+    #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
+    #'
+    #' @return character
+    TestQueryStyleJsonSerializationObject = function(json_serialized_object_ref_string_query = NULL, json_serialized_object_array_ref_string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
+      local_var_response <- self$TestQueryStyleJsonSerializationObjectWithHttpInfo(json_serialized_object_ref_string_query, json_serialized_object_array_ref_string_query, data_file = data_file, ..., .parse = .parse)
+      if (local_var_response$status_code >= 200 && local_var_response$status_code <= 299) {
+        return(local_var_response$content)
+      } else if (local_var_response$status_code >= 300 && local_var_response$status_code <= 399) {
+        return(local_var_response)
+      } else if (local_var_response$status_code >= 400 && local_var_response$status_code <= 499) {
+        return(local_var_response)
+      } else if (local_var_response$status_code >= 500 && local_var_response$status_code <= 599) {
+        return(local_var_response)
+      }
+    },
+
+    #' @description
+    #' Test query parameter(s)
+    #'
+    #' @param json_serialized_object_ref_string_query (optional) No description
+    #' @param json_serialized_object_array_ref_string_query (optional) No description
+    #' @param data_file (optional) name of the data file to save the result
+    #' @param ... Other optional arguments
+    #' @param .parse Logical. If \code{TRUE} then the response will be parsed to a generated type. If \code{FALSE} the response will be returned as unparsed text.
+    #'
+    #' @return API response (character) with additional information such as HTTP status code, headers
+    TestQueryStyleJsonSerializationObjectWithHttpInfo = function(json_serialized_object_ref_string_query = NULL, json_serialized_object_array_ref_string_query = NULL, data_file = NULL, ..., .parse = TRUE) {
+      args <- list(...)
+      query_params <- list()
+      header_params <- c()
+      form_params <- list()
+      file_params <- list()
+      local_var_body <- NULL
+      oauth_scopes <- NULL
+      is_oauth <- FALSE
+
+      if (!missing(`json_serialized_object_ref_string_query`) && is.null(`json_serialized_object_ref_string_query`)) {
+        stop("Invalid value for `json_serialized_object_ref_string_query` when calling QueryApi$TestQueryStyleJsonSerializationObject, `json_serialized_object_ref_string_query` is not nullable")
+      }
+
+      if (!missing(`json_serialized_object_array_ref_string_query`) && is.null(`json_serialized_object_array_ref_string_query`)) {
+        stop("Invalid value for `json_serialized_object_array_ref_string_query` when calling QueryApi$TestQueryStyleJsonSerializationObject, `json_serialized_object_array_ref_string_query` is not nullable")
+      }
+
+      query_params[["json_serialized_object_ref_string_query"]] <- `json_serialized_object_ref_string_query`
+
+      # no explore
+      query_params[["json_serialized_object_array_ref_string_query"]] <- I(paste(lapply(`json_serialized_object_array_ref_string_query`, URLencode, reserved = TRUE), collapse = ","))
+
+      local_var_url_path <- "/query/style_jsonSerialization/object"
+
+      # The Accept request HTTP header
+      local_var_accepts <- list("text/plain")
+
+      # The Content-Type representation header
+      local_var_content_types <- list()
+
+      local_var_resp <- self$api_client$CallApi(url = paste0(self$api_client$base_path, local_var_url_path),
+                                 method = "GET",
+                                 query_params = query_params,
+                                 header_params = header_params,
+                                 form_params = form_params,
+                                 file_params = file_params,
+                                 accepts = local_var_accepts,
+                                 content_types = local_var_content_types,
+                                 body = local_var_body,
+                                 is_oauth = is_oauth,
+                                 oauth_scopes = oauth_scopes,
+                                 ...)
+
+      if (local_var_resp$status_code >= 200 && local_var_resp$status_code <= 299) {
+        # save response in a file
+        if (!is.null(data_file)) {
+          self$api_client$WriteFile(local_var_resp, data_file)
+        }
+        if (!.parse) {
+          local_var_resp$content <- local_var_resp$response_as_text()
+          return(local_var_resp)
+        }
+
+        deserialized_resp_obj <- tryCatch(
+          self$api_client$DeserializeResponse(local_var_resp, "character"),
+          error = function(e) {
+            stop("Failed to deserialize response")
+          }
+        )
+        local_var_resp$content <- deserialized_resp_obj
+        return(local_var_resp)
+      } 
+      
+      local_var_error_msg <- local_var_resp$response_as_text()      
+      if (local_var_resp$status_code >= 300 && local_var_resp$status_code <= 399) {
+        ApiResponse$new(content = paste("Server returned ", local_var_resp$status_code, " response status code."),
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
+      } else if (local_var_resp$status_code >= 400 && local_var_resp$status_code <= 499) {
+        ApiResponse$new(content = "API client error",
+                        response = local_var_resp,
+                        status_code = local_var_resp$status_code)
+      } else if (local_var_resp$status_code >= 500 && local_var_resp$status_code <= 599) {
+        if (is.null(local_var_resp$response) || all(local_var_resp$response == "")) {
           local_var_resp$response <- "API server error"
         }
         return(local_var_resp)
